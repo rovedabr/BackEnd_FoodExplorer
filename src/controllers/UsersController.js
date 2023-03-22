@@ -1,13 +1,13 @@
-const { hash } = require("bcryptjs")
+const { hash, compare } = require("bcryptjs")
 const AppError = require("../utils/AppError");
 const sqliteConnecction = require("../database/sqlite")
 
 class UsersController {
   async create (request, response ) {
-    const { name, email, password } = request.body
+    const { name, email, password } = request.body;
 
     if(!name) {
-      throw new AppError("O nome é obrigatório!")
+      throw new AppError("O nome é obrigatório!");
     }
 
     const database = await sqliteConnecction();
@@ -21,11 +21,11 @@ class UsersController {
 
     await database.run("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, hashedPassword])
 
-    response.status(201).json()
+    response.status(201).json();
   }
 
   async update(request, response) {
-    const { name, email } = request.body;
+    const { name, email, password, old_password } = request.body;
     const { id } = request.params;
 
     const database = await sqliteConnecction();
@@ -41,16 +41,31 @@ class UsersController {
       throw new AppError("Este e-mail já está cadastrado")
     }
 
-    user.name = name;
-    user.email = email;
+    if (password && old_password) {
+      const checkOldPassword = await compare(old_password, user.password)
+
+      if (!checkOldPassword) {
+        throw new AppError("A senha antiga não confere.")
+      }
+
+      user.password = await hash(password, 10)
+    }
+
+    user.name = name ?? user.name;
+    user.email = email ?? user.email;
+
+    if (password && !old_password) {
+      throw new AppError("Você precisa informar a senha antiga para redefinição da nova senha.")
+    }
 
     await database.run(`
       UPDATE users SET
       name = ?,
       email = ?,
-      updated_at = ?
+      password = ?,
+      updated_at = DATETIME("now")
       WHERE id = ?`,
-      [user.name, user.email, new Date(), id]
+      [user.name, user.email, user.password, new Date(), id]
     );
 
     return response.status(200).json();
