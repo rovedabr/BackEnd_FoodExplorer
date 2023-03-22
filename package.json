@@ -1,0 +1,27 @@
+{
+  "name": "backend_foodexplorer",
+  "version": "1.0.0",
+  "description": "Aplicação completa de um restaurante realizada no final do curso Explorer da Rocketseat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rovedabr/BackEnd_FoodExplorer.git"
+  },
+  "keywords": [
+    "food explorer",
+    "rocketseat",
+    "desafio final"
+  ],
+  "author": "Ivan Roveda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rovedabr/BackEnd_FoodExplorer/issues"
+  },
+  "homepage": "https://github.com/rovedabr/BackEnd_FoodExplorer#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
