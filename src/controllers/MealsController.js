@@ -27,6 +27,17 @@ class MealsController {
     return response.json()
   }
 
+  async show(request, response) {
+    const { id } = request.params;
+    const meals = await knex("meals").where({ id }).first()
+
+    return response.json({
+      ...meals
+    })
+  }
+
+//fazer a função delete e a função de index
+
 };
 
 module.exports = MealsController;
