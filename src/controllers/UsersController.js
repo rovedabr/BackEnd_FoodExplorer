@@ -1,6 +1,7 @@
 const { hash, compare } = require("bcryptjs")
 const AppError = require("../utils/AppError");
-const sqliteConnecction = require("../database/sqlite")
+const sqliteConnecction = require("../database/sqlite");
+const knex = require("../database/knex")
 
 class UsersController {
   async create (request, response ) {
@@ -9,17 +10,22 @@ class UsersController {
     if(!name) {
       throw new AppError("O nome é obrigatório!");
     }
-
-    const database = await sqliteConnecction();
-    const checkUserExist = await database.get('SELECT * FROM users WHERE email = (?)', [email])
-    
-    if (checkUserExist) {
+   
+    const checkEmailExist = await knex("users").select("email").where({email})      
+    const checkUserExist = checkEmailExist.length
+  
+    if (checkUserExist > 0) {
       throw new AppError("E-mail já cadastrado!")
     }
 
     const hashedPassword = await hash(password, 10)
 
-    await database.run('INSERT INTO users (name, email, admin, password) VALUES (?, ?, ?, ?)', [name, email, admin, hashedPassword])
+    const users = await knex('users').insert({
+      name,
+      email,
+      admin,
+      password: hashedPassword
+    })
 
     response.status(201).json();
   }
