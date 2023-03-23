@@ -7,8 +7,6 @@ class UsersController {
   async create (request, response ) {
     const { name, email, admin, password } = request.body;
 
-    const database = await sqliteConnection()
-
     if(!name) {
       throw new AppError("O nome é obrigatório!");
     }
