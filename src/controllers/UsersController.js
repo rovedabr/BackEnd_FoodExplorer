@@ -7,10 +7,12 @@ class UsersController {
   async create (request, response ) {
     const { name, email, admin, password } = request.body;
 
+    const database = await sqliteConnection()
+
     if(!name) {
       throw new AppError("O nome é obrigatório!");
     }
-   
+
     const checkEmailExist = await knex("users").select("email").where({email})      
     const checkUserExist = checkEmailExist.length
   
@@ -35,13 +37,14 @@ class UsersController {
     const { id } = request.params;
 
     const database = await sqliteConnecction();
+
     const user = await database.get('SELECT * FROM users WHERE id = (?)', [id]);
 
     if (!user) {
       throw new AppError("Usuário não encontrado!");
     }
 
-    const userWithUpdatedEmail = await database.get('SELECT * FROM users WHERE email = (?)', [email]);
+    const userWithUpdatedEmail = await knex("users").select("email").where({email})
 
     if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
       throw new AppError("Este e-mail já está cadastrado")
