@@ -24,13 +24,6 @@ class MealsController {
       price 
     })
 
-    const teste = await knex("ingredients").column("name").distinct()
-    const test = JSON.parse(teste)
-    console.log(teste)
-    console.log(test)
-
-    console.log(ingredients)
-    console.log(meals_id)
     const meal_id = meals_id.pop()
 
     const ingredientsInsert = ingredients.map(ingredient => {
@@ -39,8 +32,7 @@ class MealsController {
         meals_id: meal_id
       }
     })
-    console.log(ingredientsInsert)
-
+  
     await knex("ingredients").insert(ingredientsInsert)
 
     return response.json()
@@ -48,10 +40,24 @@ class MealsController {
 
   async show(request, response) {
     const { id } = request.params;
+    
+
     const meals = await knex("meals").where({ id }).first()
+    const ingredients = await knex("Ingredients").select().where({ meal_id })
+    
+    // const ingredientsEachMeal = ingredients.map( ingredient => {
+    //   return {
+    //      ...ingredientsEachMeal
+    //   }
+    // })
+
+    // const ingredients = await knex("ingredients").where({ id })
+    console.log(ingredients)
+    console.log(ingredientsEachMeal)
 
     return response.json({
-      ...meals
+      ...meals,
+      ingredients
     })
   }
 
