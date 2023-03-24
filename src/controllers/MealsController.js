@@ -40,8 +40,6 @@ class MealsController {
 
   async show(request, response) {
     const { id } = request.params;
-    
-
     const meals = await knex("meals").where({ id }).first()
     const ingredients = await knex("ingredients").where({ meals_id: id})  
   
@@ -49,6 +47,14 @@ class MealsController {
       ...meals, 
       ingredients 
     })
+  }
+
+  async delete(request, response) {
+    const { id } = request.params;
+
+    await knex("meals").where({ id }).delete()
+
+    return response.json()
   }
 
 }
