@@ -4,7 +4,6 @@ const AppError = require("../utils/AppError");
 class MealsController {
   async create(request, response) {
     const { title, category, description, price, ingredients } = request.body;
-    const { user_id, id } = request.params;
 
     if(!title || !category || !description || !price) {
       throw new AppError("Insira todos os dados! (nome, categoria descrição e valor)")
