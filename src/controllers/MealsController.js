@@ -43,26 +43,14 @@ class MealsController {
     
 
     const meals = await knex("meals").where({ id }).first()
-    const ingredients = await knex("Ingredients").select().where({ meal_id })
-    
-    // const ingredientsEachMeal = ingredients.map( ingredient => {
-    //   return {
-    //      ...ingredientsEachMeal
-    //   }
-    // })
-
-    // const ingredients = await knex("ingredients").where({ id })
-    console.log(ingredients)
-    console.log(ingredientsEachMeal)
-
-    return response.json({
-      ...meals,
-      ingredients
+    const ingredients = await knex("ingredients").where({ meals_id: id})  
+  
+    return response.json({ 
+      ...meals, 
+      ingredients 
     })
   }
 
-//fazer a função delete e a função de index
-
-};
+}
 
 module.exports = MealsController;
