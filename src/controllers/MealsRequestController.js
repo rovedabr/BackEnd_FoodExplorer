@@ -1,7 +1,7 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 
-class MealsRequest {
+class MealsRequestController {
   async create(request, response) {
     const { id }  = request.params;
     const { status, total_price, payment_type } = request.body;
@@ -19,4 +19,4 @@ class MealsRequest {
   }
 };
 
-module.exports = MealsRequest;
+module.exports = MealsRequestController;
