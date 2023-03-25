@@ -6,7 +6,7 @@ const mealsRequestRoutes = Router();
 
 const mealsRequestController = new MealsRequestController();
 
-mealsRequestRoutes.post("/:id", mealsRequestController.create);
+mealsRequestRoutes.post("/:user_id", mealsRequestController.create);
 
 module.exports = mealsRequestRoutes;
 
