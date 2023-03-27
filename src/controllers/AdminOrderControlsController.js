@@ -1,17 +1,31 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 
-class AdminMealsOrderController {
+class AdminOrderControlsController {
   async update(request, response) {
-    const { id } =request.params
+    const { mealsOrder_id } = request.params
     const { status } = request.body;
 
-    const mealsData = knex("mealsOrder").select("id", "order_details").where({ id:mealsOrder_id, order_details})
-    const admin = knex("users").select("id").where({ user_id: id })
+    const details = await knex("mealsOrder").where({ id:mealsOrder_id }).select("order_details")
+    const user_id = await knex("mealsOrder").where({ id: mealsOrder_id }).select("user_id") 
 
-    console.log(user_id, admin, status, mealsData)
+    console.log(mealsOrder_id)
+    // const mealsOrder_id = await knex("mealsOrder").where({id: user_id}).select("id")
+
+    return await knex("adminOrderControls").insert({
+    user_id,
+    mealsOrder_id,
+    status,
+    details
+    })
+     
+
+    console.log(teste)
 
     return response.json()
+
+    //delete
+    //index
 
   }
 
@@ -34,4 +48,4 @@ class AdminMealsOrderController {
 
 //criar a função de delete, show e index
 
-module.exports = AdminMealsOrderController;
+module.exports = AdminOrderControlsController;
