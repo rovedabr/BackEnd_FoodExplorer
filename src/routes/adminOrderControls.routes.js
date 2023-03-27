@@ -1,13 +1,12 @@
 const { Router } = require("express");
 
-const AdminOrderControlsController = require("../controllers/AdminOrderControlsController")
+const AdminOrderController = require("../controllers/AdminOrderController");
 
 const adminOrderControlsRoutes = Router();
 
-const adminOrderControlsController = new AdminOrderControlsController();
+const adminOrderController = new AdminOrderController();
 
-adminOrderControlsRoutes.put("/:mealsOrder_id ", adminOrderControlsController.update);
-
+adminOrderControlsRoutes.put("/:mealsOrder_id", adminOrderController.update);
+adminOrderControlsRoutes.get("/:mealsOrder_id", adminOrderController.show);
 
 module.exports = adminOrderControlsRoutes;
-
