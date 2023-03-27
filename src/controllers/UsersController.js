@@ -1,6 +1,6 @@
 const { hash, compare } = require("bcryptjs")
 const AppError = require("../utils/AppError");
-const sqliteConnecction = require("../database/sqlite");
+const sqliteConnection = require("../database/sqlite");
 const knex = require("../database/knex")
 
 class UsersController {
@@ -34,7 +34,7 @@ class UsersController {
     const { name, email, password, old_password, admin } = request.body;
     const { id } = request.params;
 
-    const database = await sqliteConnecction();
+    const database = await sqliteConnection();
 
     const user = await database.get('SELECT * FROM users WHERE id = (?)', [id]);
 
