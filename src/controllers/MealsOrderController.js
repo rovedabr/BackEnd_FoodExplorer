@@ -6,7 +6,7 @@ class MealsOrderController {
     const { user_id }   = request.params;
     const { total_price, order_details, payment_type, observation} = request.body;
 
-    await knex("mealsRequest").insert({
+    await knex("mealsOrder").insert({
       user_id,
       order_details,
       total_price,
@@ -30,13 +30,8 @@ class MealsOrderController {
     })
   }
 
-  async update(request, response) {
-    const { mealsOrder_id } = request.body;
+  // async delete(request, response)
 
-    await knex("mealsOrder").select("id").where({ id: mealsOrder_id }).delete()
-
-    return response.json()
-  }
 };
 
 
