@@ -7,6 +7,7 @@ exports.up = knex => knex.schema.createTable("mealsOrder", table => {
   table.timestamp("created_at").default(knex.fn.now())
   table.text("payment_type", ["PIX", "Crédito"]).notNullable()
   table.text("observation").default(null)
+  table.text("status", ["Pendente", "Preparado", "Entregue"]).notNullable()
 })
 
 exports.down = knex => knex.schema.dropTable("mealsOrder")

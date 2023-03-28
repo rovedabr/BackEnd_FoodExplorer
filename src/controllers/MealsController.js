@@ -70,13 +70,11 @@ class MealsController {
       ingredients
     })
   }
- 
   
-
+//-------------------------ver delete
   async delete(request, response) {
     const { id } = request.params;
-    console.log(id)
-
+ 
     await knex("meals").where({ id }).delete()
 
     return response.json()

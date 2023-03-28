@@ -4,7 +4,7 @@ const { compare } = require("bcryptjs");
 const authConfig = require("../configs/auth");
 const { sign } = require("jsonwebtoken");
 
-class SessionsControloller {
+class SessionsController {
   async create(request, response) {
     const { email, password } = request.body;
 
@@ -28,9 +28,9 @@ class SessionsControloller {
       expiresIn
     })
 
-    return response.json({user, token})
+    return response.status(201).json({user, token})
 
   }
 }
 
-module.exports = SessionsControloller;
+module.exports = SessionsController;

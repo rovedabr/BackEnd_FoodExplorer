@@ -4,16 +4,33 @@ const AppError = require("../utils/AppError");
 class MealsOrderController {
   async create(request, response) {
     const user_id   = request.user.id;
-    const { total_price, order_details, payment_type, observation} = request.body;
+    const { total_price, order_details, payment_type, observation, status } = request.body;
 
-    await knex("mealsOrder").insert({
+    const mealsOrderData = await knex("mealsOrder").insert({
       user_id,
       order_details,
       total_price,
       payment_type,
-      observation
+      observation,
+      status
     })
 
+    const paymentInsert = mealsOrderData.map(data => {
+      return {
+        user_id,
+        mealsOrder_id: mealsOrderData,
+        payment_type,
+        total_price
+      }    
+    })
+
+    await knex("payment").insert(paymentInsert)
+
+
+
+    console.log(paymentInsert)
+
+  
     return response.json()
   }
 
