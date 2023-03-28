@@ -1,5 +1,5 @@
 
-exports.up = knex => knex.schema.createTable("adminOrderControls", table => {
+exports.up = knex => knex.schema.createTable("orderControls", table => {
   table.increments("id")
   table.integer("user_id").references("id").inTable("users").onDelete("CASCADE")
   table.integer("mealsOrder_id").references("id").inTable("mealsOrder").onDelete("CASCADE")

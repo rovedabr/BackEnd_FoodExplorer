@@ -3,7 +3,7 @@ const AppError = require("../utils/AppError");
 
 class MealsOrderController {
   async create(request, response) {
-    const { user_id }   = request.params;
+    const user_id   = request.user.id;
     const { total_price, order_details, payment_type, observation} = request.body;
 
     await knex("mealsOrder").insert({
@@ -18,7 +18,7 @@ class MealsOrderController {
   }
 
   async show(request, response) {
-    const { user_id } = request.params;
+    const user_id  = request.user.id;
     
     const order_details = await knex("mealsOrder").select("order_details").where({ id: user_id })
     const observation = await knex("mealsOrder").select("observation").where({ id: user_id })

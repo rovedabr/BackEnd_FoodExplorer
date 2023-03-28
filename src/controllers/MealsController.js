@@ -48,8 +48,34 @@ class MealsController {
     })
   }
 
+  async index(request, response) {
+
+    const meals = await knex("meals").
+    select([
+      "id",
+      "title",
+      "category",
+      "price",
+      "description"
+    ])
+      .orderBy("title")
+
+    const ingredients = await knex("ingredients")
+      .select("name")
+      .distinct()
+      .orderBy("name")
+
+    return response.json({
+      ...meals,
+      ingredients
+    })
+  }
+ 
+  
+
   async delete(request, response) {
     const { id } = request.params;
+    console.log(id)
 
     await knex("meals").where({ id }).delete()
 

@@ -2,7 +2,7 @@ const { json } = require("express");
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 
-class AdminOrderController {
+class OrderController {
   async show(request, response) {
     const { mealsOrder_id } = request.params;
     const { status } = request.body;
@@ -57,4 +57,4 @@ class AdminOrderController {
 
 //criar a função de delete, show e index
 
-module.exports = AdminOrderController;
+module.exports = OrderController;
