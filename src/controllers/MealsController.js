@@ -1,5 +1,6 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
+const DiskStorage = require("../providers/DiskStorage")
 
 class MealsController {
   async create(request, response) {
@@ -71,13 +72,46 @@ class MealsController {
     })
   }
   
-//-------------------------ver delete
+//-------------------------ver delete //! arrumar esta função -  delete não funcionando
   async delete(request, response) {
     const { id } = request.params;
  
     await knex("meals").where({ id }).delete()
 
     return response.json()
+  }
+
+  async update(request, response) { //!verificar se é necessária esta função
+    const  { id }   = request.params;
+    const { title, description, category, price, ingredients, image } = request.body
+
+    const imageFilename = request.file.filename;
+    const diskStorage = new DiskStorage;
+
+    const meal = await knex("meals").where({id}).first()
+
+    if(!meal) {
+      throw new AppError("Prato não localizado ou inexistente", 401)
+    }
+
+    console.log(meal.image)
+
+    if (meal.image) {
+      await diskStorage.deleteFile(meal.image)
+    }
+
+    const filename = await diskStorage.saveFile(imageFilename);
+
+    meal.image = image ?? filename;
+    meal.title = title ?? meal.title;
+    meal.description = description ?? meal.description;
+    meal.category = category ?? meal.category;
+    meal.price = price ?? meal.price;
+
+    await knex("meals").update(meal).where({ id })
+
+    return response.json(meal)
+
   }
 
 }
