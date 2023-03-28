@@ -32,20 +32,17 @@ class UsersController {
 
   async update(request, response) {
     const { name, email, password, old_password, admin } = request.body;
-    const { id } = request.params;
+    const  user_id = request.user.id;
 
     const database = await sqliteConnection();
 
-    const user = await database.get('SELECT * FROM users WHERE id = (?)', [id]);
+    const user = await database.get('SELECT * FROM users WHERE id = (?)', [user_id]);
 
-    if (!user) {
-      throw new AppError("Usuário não encontrado!");
-    }
+    const userWithEmail = await knex("users").select("email").where({email})
+    const userWithUpdatedEmail = userWithEmail.length
 
-    const userWithUpdatedEmail = await knex("users").select("email").where({email})
-
-    if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
-      throw new AppError("Este e-mail já está cadastrado")
+    if(userWithUpdatedEmail === 0 ) {
+      throw new AppError("Este e-mail não está cadastrado")
     }
 
     if (password && old_password) {
@@ -74,7 +71,7 @@ class UsersController {
       admin = ?,
       updated_at = DATETIME("now")
       WHERE id = ?`,
-      [user.name, user.email, user.password, user.admin, id]
+      [user.name, user.email, user.password, user.admin, user_id]
     );
 
     return response.status(200).json();

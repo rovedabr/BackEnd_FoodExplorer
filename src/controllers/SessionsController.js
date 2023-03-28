@@ -1,5 +1,8 @@
 const knex = require("../database/knex");
-const AppError = require("../utils/AppError")
+const AppError = require("../utils/AppError");
+const { compare } = require("bcryptjs");
+const authConfig = require("../configs/auth");
+const { sign } = require("jsonwebtoken");
 
 class SessionsControloller {
   async create(request, response) {
@@ -11,7 +14,21 @@ class SessionsControloller {
       throw new AppError("Email e/ou senha incorreta", 401)
     }
 
-    return response.json(user)
+    // validação do administrador
+
+    const passwordMatched = await compare(password, user.password);
+
+    if (!passwordMatched) {
+      throw new AppError("A senha informada está incorreta!", 401)
+    }
+
+    const { secret, expiresIn } = authConfig.jwt;
+    const token = sign({}, secret, {
+      subject: String(user.id),
+      expiresIn
+    })
+
+    return response.json({user, token})
 
   }
 }
