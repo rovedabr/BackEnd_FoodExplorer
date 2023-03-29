@@ -2,11 +2,13 @@ const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
 
 async function ensureUserAdminVerify(request, response, next) {
-  const user_id = request.user.id;
+  const id = request.user.id;
+  // console.log(id)
 
-  const userTagAdmin = await knex("users").select("admin").where({id: user_id}).first()
+  const userTag = await knex("users").select("admin").where({id}).first()
+  const isUserTagAdmin = userTag.admin
 
-  if (userTagAdmin === 0) {
+  if (isUserTagAdmin !== 1) {
     throw new AppError("Acesso não autorizado!", 401)
   }
 

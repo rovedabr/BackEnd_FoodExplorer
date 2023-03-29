@@ -13,9 +13,6 @@ class SessionsController {
     if(!user) {
       throw new AppError("Email e/ou senha incorreta", 401)
     }
-
-    // validação do administrador
-
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {

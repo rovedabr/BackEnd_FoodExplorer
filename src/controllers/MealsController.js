@@ -4,7 +4,9 @@ const DiskStorage = require("../providers/DiskStorage")
 
 class MealsController {
   async create(request, response) {
+  
     const { title, category, description, price, ingredients } = request.body;
+    const user_id = request.user.id
 
     if(!title || !category || !description || !price) {
       throw new AppError("Insira todos os dados! (nome, categoria descrição e valor)")
@@ -18,6 +20,7 @@ class MealsController {
     }
 
     const meals_id = await knex("meals").insert({
+      user_id,
       title,
       category,
       description,
@@ -86,8 +89,6 @@ class MealsController {
       throw new AppError("Prato não localizado ou inexistente", 401)
     }
 
-    console.log(meal.image)
-
     if (meal.image) {
       await diskStorage.deleteFile(meal.image)
     }
@@ -102,10 +103,9 @@ class MealsController {
 
     await knex("meals").update(meal).where({ id })
 
- 
     return response.status(200).json(meal)
-
   }
+  
 
   async delete(request, response) {
     const { id } = request.params;

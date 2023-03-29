@@ -5,8 +5,7 @@ class MealsOrderController {
   async create(request, response) {
     const user_id   = request.user.id;
     const { total_price, order_details, payment_type, observation, status } = request.body;
-    const user
-
+    
     const mealsOrderData = await knex("mealsOrder").insert({
       user_id,
       order_details,
