@@ -3,14 +3,14 @@ const multer = require("multer");
 const uploadsConfig = require("../configs/upload")
 
 const MealsController = require("../controllers/MealsController");
-// const MealsImageController = require("../controllers/MealsImageController");
+
 const ensureAuthenticated = require("../middleware/ensureAuthenticated")
 
 const mealsRoutes = Router();
 const upload = multer(uploadsConfig.MULTER)
 
 const mealsController = new MealsController();
-// const mealsImageController = new MealsImageController();
+
 
 mealsRoutes.post("/", mealsController.create);
 mealsRoutes.get("/:id", mealsController.show);

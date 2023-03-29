@@ -38,6 +38,7 @@ class MealsController {
     return response.json()
   }
 
+
   async show(request, response) {
     const { id } = request.params;
     const meals = await knex("meals").where({ id }).first()
@@ -49,16 +50,16 @@ class MealsController {
     })
   }
 
-  async index(request, response) {
 
+  async index(request, response) {
     const meals = await knex("meals").
-    select([
-      "id",
-      "title",
-      "category",
-      "price",
-      "description"
-    ])
+      select([
+        "id",
+        "title",
+        "category",
+        "price",
+        "description"
+      ])
       .orderBy("title")
 
     const ingredients = await knex("ingredients")
@@ -72,18 +73,9 @@ class MealsController {
     })
   }
   
-//-------------------------ver delete //! arrumar esta função -  delete não funcionando
-  async delete(request, response) {
-    const { id } = request.params;
- 
-    await knex("meals").where({ id }).delete()
-
-    return response.json()
-  }
-
-  async update(request, response) { //!verificar se é necessária esta função
+  async update(request, response) { 
     const  { id }   = request.params;
-    const { title, description, category, price, ingredients, image } = request.body
+    const { title, description, category, price, image } = request.body
 
     const imageFilename = request.file.filename;
     const diskStorage = new DiskStorage;
@@ -110,8 +102,17 @@ class MealsController {
 
     await knex("meals").update(meal).where({ id })
 
-    return response.json(meal)
+ 
+    return response.status(200).json(meal)
 
+  }
+
+  async delete(request, response) {
+    const { id } = request.params;
+ 
+    await knex("meals").where({ id }).delete()
+
+    return response.json()
   }
 
 }

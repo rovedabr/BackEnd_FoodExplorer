@@ -5,6 +5,7 @@ class MealsOrderController {
   async create(request, response) {
     const user_id   = request.user.id;
     const { total_price, order_details, payment_type, observation, status } = request.body;
+    const user
 
     const mealsOrderData = await knex("mealsOrder").insert({
       user_id,
@@ -15,22 +16,6 @@ class MealsOrderController {
       status
     })
 
-    const paymentInsert = mealsOrderData.map(data => {
-      return {
-        user_id,
-        mealsOrder_id: mealsOrderData,
-        payment_type,
-        total_price
-      }    
-    })
-
-    await knex("payment").insert(paymentInsert)
-
-
-
-    console.log(paymentInsert)
-
-  
     return response.json()
   }
 
