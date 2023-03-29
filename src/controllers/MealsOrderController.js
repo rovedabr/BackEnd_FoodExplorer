@@ -6,7 +6,7 @@ class MealsOrderController {
     const user_id   = request.user.id;
     const { total_price, order_details, payment_type, observation, status } = request.body;
     
-    const mealsOrderData = await knex("mealsOrder").insert({
+    await knex("mealsOrder").insert({
       user_id,
       order_details,
       total_price,
@@ -20,23 +20,33 @@ class MealsOrderController {
 
   async show(request, response) {
     const user_id  = request.user.id;
-    
-    const order_details = await knex("mealsOrder").select("order_details").where({ id: user_id })
-    const observation = await knex("mealsOrder").select("observation").where({ id: user_id })
-    
-    return response.json({
-      user_id,
-      order_details,
-      observation
-    })
+    const { mealsOrder_id } = request.params;
+  
+    const mealOrder = await knex("mealsOrder")
+      .select([
+        "user_id",
+        "order_details",
+        "observation",
+        "created_at",
+      ])
+      .where({
+        user_id, 
+        id: mealsOrder_id
+      })
+
+    return response.json(mealOrder)
   }
 
-  // async delete(request, response)
+//!verificar a função de delete
+  async delete(request, response) {
+    const { id } = request.params;
+    console.log(id)
+ 
+    // await knex("mealsOrder").where({ id }).delete()
+
+    return response.json("Pedido apagado com sucesso")
+  }
 
 };
-
-
-
-//criar a função de delete, show e index
 
 module.exports = MealsOrderController;

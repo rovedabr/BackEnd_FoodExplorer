@@ -8,13 +8,10 @@ const mealsOrderRoutes = Router();
 
 const mealsOrderController = new MealsOrderController();
 
-mealsOrderRoutes.use(ensureAuthenticated);
-mealsOrderRoutes.use(ensureUserAdminVerify);
 
-
-mealsOrderRoutes.post("/",  mealsOrderController.create);
-// mealsOrderRoutes.get("/",  mealsOrderController.show);
-// mealsOrderRoutes.delete("/:mealsOrder_id", mealsOrderController.delete);
+mealsOrderRoutes.post("/", ensureAuthenticated, mealsOrderController.create);
+mealsOrderRoutes.get("/:id",  ensureAuthenticated, mealsOrderController.show);
+mealsOrderRoutes.delete("/:id",  ensureAuthenticated, ensureUserAdminVerify, mealsOrderController.delete);
 
 module.exports = mealsOrderRoutes;
 
