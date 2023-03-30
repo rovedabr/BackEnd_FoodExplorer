@@ -7,13 +7,13 @@ class UserCreateServices {
   }
 
   async execute({ name, email, admin, password }) {
-    // const userRepository = new UserRepository();
+
     if(!name) {
       throw new AppError("O nome é obrigatório!");
     }
 
     const checkEmailExist = await this.userRepository.findByEmail(email);  
-    const checkUserExist = checkEmailExist.length;
+    checkUserExist = () => checkEmailExist.length;
   
     if (checkUserExist > 0) {
       throw new AppError("E-mail já cadastrado!")
