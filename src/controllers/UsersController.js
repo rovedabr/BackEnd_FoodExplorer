@@ -7,13 +7,13 @@ const UserRepository = require("../repositories/UserRepository");
 class UsersController {
   async create (request, response ) {
     const { name, email, admin, password } = request.body;
+    
     const userRepository = new UserRepository();
 
     if(!name) {
       throw new AppError("O nome é obrigatório!");
     }
 
-    // const checkEmailExist = await knex("users").select("email").where({email})  
     const checkEmailExist = await userRepository.findByEmail(email);  
     const checkUserExist = checkEmailExist.length;
   
@@ -22,13 +22,6 @@ class UsersController {
     };
 
     const hashedPassword = await hash(password, 10);
-
-    // const users = await knex('users').insert({
-    //   name,
-    //   email,
-    //   admin,
-    //   password: hashedPassword
-    // })
 
     await userRepository.create({ name, email, admin, password: hashedPassword });
 

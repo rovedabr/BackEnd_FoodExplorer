@@ -13,7 +13,7 @@ class UserRepository {
       name,
       email,
       admin,
-      password: hashedPassword
+      password
     })
     return { userInsert }
   }
