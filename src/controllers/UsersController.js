@@ -1,29 +1,35 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
+
 const { hash, compare } = require("bcryptjs");
 const sqliteConnection = require("../database/sqlite");
+
 const UserRepository = require("../repositories/UserRepository");
+const UserCreateServices = require("../services/UserCreateServices");
 
 class UsersController {
   async create (request, response ) {
     const { name, email, admin, password } = request.body;
-    
+
     const userRepository = new UserRepository();
+    const userCreateServices =new UserCreateServices(userRepository);
+    await userCreateServices.execute({ name, email, admin, password });
+    
 
-    if(!name) {
-      throw new AppError("O nome é obrigatório!");
-    }
+    // if(!name) {
+    //   throw new AppError("O nome é obrigatório!");
+    // }
 
-    const checkEmailExist = await userRepository.findByEmail(email);  
-    const checkUserExist = checkEmailExist.length;
+    // const checkEmailExist = await userRepository.findByEmail(email);  
+    // const checkUserExist = checkEmailExist.length;
   
-    if (checkUserExist > 0) {
-      throw new AppError("E-mail já cadastrado!")
-    };
+    // if (checkUserExist > 0) {
+    //   throw new AppError("E-mail já cadastrado!")
+    // };
 
-    const hashedPassword = await hash(password, 10);
+    // const hashedPassword = await hash(password, 10);
 
-    await userRepository.create({ name, email, admin, password: hashedPassword });
+    // await userRepository.create({ name, email, admin, password: hashedPassword });
 
     response.status(201).json();
   }
