@@ -1,3 +1,4 @@
+const knex = require("../database/knex")
 const sqliteConnection = require("../database/sqlite");
 
 class UserRepository {
@@ -7,14 +8,15 @@ class UserRepository {
     return user
   }
 
-  async create(name, email, admin, password) {
+  async create({ name, email, admin, password }) {
     const userInsert = await knex('users').insert({
       name,
       email,
       admin,
       password: hashedPassword
     })
-    return userInsert
+    return { userInsert }
   }
-
 }
+
+module.exports = UserRepository;
