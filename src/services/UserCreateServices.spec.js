@@ -24,23 +24,23 @@ describe("UserCreateServices", () => {
     expect(userCreated).toHaveProperty("id");
   });
 
-  // it("user not should be create with exists email", async () => {
-  //   const userTest1 = {
-  //     name: "User Test 1",
-  //     email: "usertest@test.com",
-  //     password: "111",
-  //     admin: 0
-  //   }
+  it("user not should be create with exists email", async () => {
+    const userTest1 = {
+      name: "User Test 1",
+      email: "usertest@test.com",
+      password: "111",
+      admin: 0
+    }
 
-  //   const userTest2 = {
-  //     name: "User Test 2",
-  //     email: "usertest@test.com",
-  //     password: "222",
-  //     admin: 0
-  //   }
+    const userTest2 = {
+      name: "User Test 2",
+      email: "usertest@test.com",
+      password: "222",
+      admin: 0
+    }
 
-  //   await userCreateServices.execute(userTest1);
-  //   await expect(userCreateServices.execute(userTest2)).rejects.toEqual(new AppError("Este e-mail não está cadastrado"));
-  // })
+    await userCreateServices.execute(userTest1);
+    await expect(userCreateServices.execute(userTest2)).rejects.toEqual(new AppError("E-mail já cadastrado!"));
+  })
 
 })

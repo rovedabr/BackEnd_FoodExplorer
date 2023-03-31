@@ -15,6 +15,8 @@ class UserRepositoryInMemory {
   }
 
   async findByEmail(email) {
+    // console.log(users)
+    // console.log(user.email)
     return this.users.find(user => user.email === email)
   }
 }

@@ -12,10 +12,9 @@ class UserCreateServices {
       throw new AppError("O nome é obrigatório!");
     }
 
-    const checkUser = await this.userRepository.findByEmail(email);  
-    let checkUserExist = () => checkUser.length;
+    const user = await this.userRepository.findByEmail(email);  
   
-    if (checkUserExist > 0) {
+    if (user) {
       throw new AppError("E-mail já cadastrado!")
     };
 
