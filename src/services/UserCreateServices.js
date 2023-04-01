@@ -12,7 +12,9 @@ class UserCreateServices {
       throw new AppError("O nome é obrigatório!");
     }
 
-    const user = await this.userRepository.findByEmail(email);  
+    const user = await this.userRepository.findByEmail({ email }); 
+    console.log(email) //user20@email.com
+    console.log(user) //[] user20@email.com não está no BD
   
     if (user) {
       throw new AppError("E-mail já cadastrado!")

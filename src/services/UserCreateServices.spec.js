@@ -10,6 +10,7 @@ describe("UserCreateServices", () => {
   beforeEach(() => {
     userRepositoryInMemory = new UserRepositoryInMemory();
     userCreateServices = new UserCreateServices(userRepositoryInMemory);
+
   })
 
   it("user should be create", async () => {
