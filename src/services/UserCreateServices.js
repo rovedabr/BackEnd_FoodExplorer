@@ -13,8 +13,6 @@ class UserCreateServices {
     }
 
     const user = await this.userRepository.findByEmail({ email }); 
-    console.log(email) //user20@email.com
-    console.log(user) //[] user20@email.com não está no BD
   
     if (user) {
       throw new AppError("E-mail já cadastrado!")

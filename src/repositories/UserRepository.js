@@ -4,10 +4,7 @@ const sqliteConnection = require("../database/sqlite");
 class UserRepository {
   async findByEmail({ email }) {
     const user = await knex("users").where({ email }).first()
-    // const checkUserExist = user.length;
-    // console.log(user)
-    console.log(user)
-
+    
     return user
   }
 
