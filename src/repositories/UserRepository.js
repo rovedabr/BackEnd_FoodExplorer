@@ -4,9 +4,16 @@ const sqliteConnection = require("../database/sqlite");
 
 class UserRepository {
   async findByEmail({ email }) {
-    const user = await knex("users").where({ email }).first()
+    const userEmail = await knex("users").where({ email }).first()
     
-    return user
+    return userEmail
+  }
+
+  async findUser({ user }) {
+    const user_id = await knex("users").where({ email }).select("id").first()
+    const userId = await knex("users").where({id: user_id.id}).first()
+
+    return userId
   }
 
   async create({ name, email, admin, password }) {
@@ -19,29 +26,16 @@ class UserRepository {
     return { userInsert }
   }
 
-  async update({ name, email, password, updated_at }) {
-    // const user = await database.get('SELECT * FROM users WHERE id = (?)', [user_id]);
-    // const database = await sqliteConnection();
-    
-    const userId = await knex("users").where({ email }).first().update({
+  async update( name, email, password ) {
+    const updated_at = knex.raw('CURRENT_TIMESTAMP')
+
+    await knex("users").where({ email } ).update({
       name,
       email,
       updated_at,
-      newPassword: password
+      password
     })
-
-    return { userId , name, email, updated_at, password}
-  //   const userUpdate = await database.run(`
-  //     UPDATE users SET
-  //     name = ?,
-  //     email = ?,
-  //     password = ?,
-  //     admin = ?,
-  //     updated_at = DATETIME("now")
-  //     WHERE id = ?`,
-  //     [user.name, user.email, user.password, user.admin, user_id]
-  //   );
-  //   return { userUpdate }
+    return 
   }
 
 }
