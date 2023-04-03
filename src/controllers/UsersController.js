@@ -1,8 +1,8 @@
-const knex = require("../database/knex");
-const AppError = require("../utils/AppError");
+// const knex = require("../database/knex");
+// const AppError = require("../utils/AppError");
 
-const { hash, compare } = require("bcryptjs");
-const sqliteConnection = require("../database/sqlite");
+// const { hash, compare } = require("bcryptjs");
+// const sqliteConnection = require("../database/sqlite");
 
 const UserRepository = require("../repositories/UserRepository");
 const UserCreateServices = require("../services/UserCreateServices");
@@ -20,14 +20,14 @@ class UsersController {
   }
 
   async update(request, response) {
-    const { name, email, password, old_password, admin } = request.body;
+    const { name, email, password, old_password } = request.body;
     const user_id = request.user.id;  
 
-    const database = await sqliteConnection();
+    // const database = await sqliteConnection();
 
     const userRepository = new UserRepository();
     const userUpdateServices =new UserUpdateServices(userRepository);
-    await userUpdateServices.execute({ name, email, admin, password, old_password, user_id })
+    await userUpdateServices.execute({ name, email, password, old_password })
 
     // const user = await database.get('SELECT * FROM users WHERE id = (?)', [user_id]);
 

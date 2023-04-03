@@ -19,19 +19,29 @@ class UserRepository {
     return { userInsert }
   }
 
-  async update({ name, email, password, admin, updated_at }) {
-    await database.run(`
-      UPDATE users SET
-      name = ?,
-      email = ?,
-      password = ?,
-      admin = ?,
-      updated_at = DATETIME("now")
-      WHERE id = ?`,
-      [user.name, user.email, user.password, user.admin, user_id]
-    );
+  async update({ name, email, password, updated_at }) {
+    // const user = await database.get('SELECT * FROM users WHERE id = (?)', [user_id]);
+    // const database = await sqliteConnection();
     
-    return
+    const userId = await knex("users").where({ email }).first().update({
+      name,
+      email,
+      updated_at,
+      newPassword: password
+    })
+
+    return { userId , name, email, updated_at, password}
+  //   const userUpdate = await database.run(`
+  //     UPDATE users SET
+  //     name = ?,
+  //     email = ?,
+  //     password = ?,
+  //     admin = ?,
+  //     updated_at = DATETIME("now")
+  //     WHERE id = ?`,
+  //     [user.name, user.email, user.password, user.admin, user_id]
+  //   );
+  //   return { userUpdate }
   }
 
 }
