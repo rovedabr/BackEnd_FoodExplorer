@@ -6,6 +6,7 @@ const sqliteConnection = require("../database/sqlite");
 
 const UserRepository = require("../repositories/UserRepository");
 const UserCreateServices = require("../services/UserCreateServices");
+const UserUpdateServices = require("../services/UserUpdateServices");
 
 class UsersController {
   async create (request, response ) {
@@ -20,12 +21,13 @@ class UsersController {
 
   async update(request, response) {
     const { name, email, password, old_password, admin } = request.body;
-    const  user_id = request.user.id;
+    const user_id = request.user.id;  
 
     const database = await sqliteConnection();
+
     const userRepository = new UserRepository();
-    const userCreateServices =new UserCreateServices(userRepository);
-    await userCreateServices.update({  name, email, password, old_password, admin  });
+    const userUpdateServices =new UserUpdateServices(userRepository);
+    await userUpdateServices.execute({ name, email, admin, password, old_password, user_id })
 
     // const user = await database.get('SELECT * FROM users WHERE id = (?)', [user_id]);
 
