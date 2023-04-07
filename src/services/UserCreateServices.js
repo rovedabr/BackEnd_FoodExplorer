@@ -6,7 +6,9 @@ class UserCreateServices {
     this.userRepository = userRepository;
   }
 
-  async execute({ name, email, admin, password }) {
+  async execute({ name, email, password }) {
+
+    let admin = 0 // Admin = 0  False / Admin = 1 True
 
     if(!name) {
       throw new AppError("O nome é obrigatório!");

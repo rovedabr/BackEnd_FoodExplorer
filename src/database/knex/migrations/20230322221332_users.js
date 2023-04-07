@@ -4,7 +4,7 @@ exports.up = knex => knex.schema.createTable("users", table => {
   table.text("name").notNullable();
   table.text("email").notNullable();
   table.integer("password").notNullable();
-  table.boolean("admin").defaultTo(0).notNullable();
+  table.boolean("admin").defaultTo(false).notNullable();
   table.timestamp("created_at").default(knex.fn.now());
   table.timestamp("updated_at").default(knex.fn.now());
 });

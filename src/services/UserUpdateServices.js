@@ -1,19 +1,16 @@
-const sqliteConnection = require("../database/sqlite");
 const AppError = require("../utils/AppError");
-const knex = require("../database/knex");
 const { hash, compare } = require("bcryptjs");
-const { request } = require("express");
 
 class UserUpdateServices {
   constructor(userRepository) {
     this.userRepository = userRepository;
   }
 
-  async execute({ name, email, password, old_password , admin}) {
+  async execute({ name, email, password, old_password , admin }) {
     // const user_id = request.params.id
 
     const user = await this.userRepository.findByEmail({ email })
-    console.log(user)
+
     // const user = await this.userRepository.findUser({id: user_id})
     // console.log(user)
 
@@ -58,7 +55,8 @@ class UserUpdateServices {
     // console.log(user.password)
 
   const userUpdated =  await this.userRepository.update(user.name, user.email, user.password);
-    console.log(userUpdated)
+
+  return userUpdated;
     // console.log((user.name, user.email, user.password))
 
   }

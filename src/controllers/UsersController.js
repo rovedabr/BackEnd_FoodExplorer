@@ -1,20 +1,14 @@
-// const knex = require("../database/knex");
-// const AppError = require("../utils/AppError");
-
-// const { hash, compare } = require("bcryptjs");
-// const sqliteConnection = require("../database/sqlite");
-
 const UserRepository = require("../repositories/UserRepository");
 const UserCreateServices = require("../services/UserCreateServices");
 const UserUpdateServices = require("../services/UserUpdateServices");
 
 class UsersController {
   async create (request, response ) {
-    const { name, email, admin, password } = request.body;
+    const { name, email, password } = request.body;
 
     const userRepository = new UserRepository();
     const userCreateServices =new UserCreateServices(userRepository);
-    await userCreateServices.execute({ name, email, admin, password });
+    await userCreateServices.execute({ name, email, password });
 
     response.status(201).json();
   }

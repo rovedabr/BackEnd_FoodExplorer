@@ -1,7 +1,7 @@
 class UserRepositoryInMemory {
   users = []
 
-  async create({ name, email, admin, password }) {
+  async create({ name, email, password }) {
     const user = {
       id: Math.floor(Math.random() * 1000 + 1),
       email,
