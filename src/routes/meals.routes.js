@@ -18,6 +18,8 @@ mealsRoutes.post("/",  ensureAuthenticated, ensureUserAdminVerify, mealsControll
 mealsRoutes.get("/:id", mealsController.show);
 mealsRoutes.get("/", mealsController.index);
 mealsRoutes.delete("/:id", ensureAuthenticated, ensureUserAdminVerify, mealsController.delete)
-mealsRoutes.patch("/image/:id", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), imageController.update);
+mealsRoutes.patch("/image", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), (request, response) => {
+  console.log(request.file.filename)}
+);
 
 module.exports = mealsRoutes; 
