@@ -4,9 +4,8 @@ const DiskStorage = require("../providers/DiskStorage")
 
 class MealsController {
   async create(request, response) {
-  
     const { title, category, description, price, ingredients } = request.body;
-    const user_id = request.user.id
+    const user_id = request.user.id;
 
     if(!title || !category || !description || !price) {
       throw new AppError("Insira todos os dados! (nome, categoria descrição e valor)")
@@ -19,16 +18,20 @@ class MealsController {
       throw new AppError("Este prato já se encontra cadastrado!")
     }
 
+    const imageFile = request.file.filename
+    const diskStorage = new DiskStorage()
+    const filename = await diskStorage.saveFile(imageFile)
+
     const [ meals_id ] = await knex("meals").insert({
       user_id,
+      image: filename,
       title,
       category,
       description,
       price 
     })
 
-
-    const ingredientsInsert = ingredients.map(ingredient => {
+    const  ingredientsInsert = ingredients.map(ingredient => {
       return {
         name: ingredient, 
         meals_id
@@ -37,7 +40,7 @@ class MealsController {
   
     await knex("ingredients").insert(ingredientsInsert)
 
-    return response.json()
+    return response.status(201).json()
   }
 
 
@@ -100,7 +103,7 @@ class MealsController {
     meal.category = category ?? meal.category;
     meal.price = price ?? meal.price;
 
-    await knex("meals").update(meal).where({ id })
+    await knex("meals").select("image").insert(meal).where({ id })
 
     return response.status(200).json(meal)
   }
