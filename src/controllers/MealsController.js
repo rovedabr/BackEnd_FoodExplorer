@@ -19,7 +19,7 @@ class MealsController {
       throw new AppError("Este prato já se encontra cadastrado!")
     }
 
-    const meals_id = await knex("meals").insert({
+    const [ meals_id ] = await knex("meals").insert({
       user_id,
       title,
       category,
@@ -27,12 +27,11 @@ class MealsController {
       price 
     })
 
-    const meal_id = meals_id.pop()
 
     const ingredientsInsert = ingredients.map(ingredient => {
       return {
         name: ingredient, 
-        meals_id: meal_id
+        meals_id
       }
     })
   
