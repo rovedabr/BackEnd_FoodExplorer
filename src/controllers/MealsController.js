@@ -55,27 +55,43 @@ class MealsController {
     })
   }
 
-
   async index(request, response) {
-    const meals = await knex("meals").
-      select([
-        "id",
-        "title",
-        "category",
-        "price",
-        "description"
-      ])
-      .orderBy("title")
+    const { title, ingredients } = request.query
 
-    const ingredients = await knex("ingredients")
-      .select("name")
-      .distinct()
-      .orderBy("name")
+    let meals
 
-    return response.json({
-      ...meals,
-      ingredients
+    if(ingredients) {
+      const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim())    
+
+      const [ meals ] = await knex("ingredients")
+        .select([
+          "meals.id",
+          "meals.title",
+          "meals.image",
+          "meals.category",
+          "meals.price",
+          "meals.description"
+        ])
+        .whereLike("meals.title", `%${title}`)
+        .whereIn("name", filterIngredients)
+        .innerJoin("meals", "meals.id", "ingredients.meals_id")
+        .orderBy("meals.title")
+      
+  } else {
+    meals = await knex("meals")
+    .whereLike("title", `%${title}%`)
+    .orderBy("title")
+  }
+
+    const mealsIngredients = await knex("meals")
+    const mealsWithIngredients = meals.map(meal => {
+      const mealIngredient = mealsIngredients.filter(ingredient => ingredient.meals_id === meals.id)
+      return {
+        ...meal,
+        ingredients: mealIngredient
+      }
     })
+    return response.json(mealsIngredients)
   }
   
   async update(request, response) { 
