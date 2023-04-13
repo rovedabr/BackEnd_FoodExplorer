@@ -46,11 +46,11 @@ class MealsController {
 
   async show(request, response) {
     const { id } = request.params;
-    const meals = await knex("meals").where({ id }).first()
+    const meal = await knex("meals").where({ id }).first()
     const ingredients = await knex("ingredients").where({ meals_id: id})  
   
     return response.json({ 
-      ...meals, 
+      ...meal, 
       ingredients 
     })
   }
@@ -95,13 +95,14 @@ class MealsController {
   }
   
   async update(request, response) { 
-    const  { id }   = request.params;
-    const { title, description, category, price, image } = request.body
+    const  meal_id   = request.params.id;
+    const { title, description, category, price, ingredients, image } = request.body
 
-    const imageFilename = request.file.filename;
-    const diskStorage = new DiskStorage;
+    const imageFile = request.file.filename
+    const diskStorage = new DiskStorage()
+    const filename = await diskStorage.saveFile(imageFile)
 
-    const meal = await knex("meals").where({id}).first()
+    const meal = await knex("meals").where({ id: meal_id }).first()
 
     if(!meal) {
       throw new AppError("Prato não localizado ou inexistente", 401)
@@ -111,16 +112,26 @@ class MealsController {
       await diskStorage.deleteFile(meal.image)
     }
 
-    const filename = await diskStorage.saveFile(imageFilename);
-
     meal.image = image ?? filename;
     meal.title = title ?? meal.title;
     meal.description = description ?? meal.description;
     meal.category = category ?? meal.category;
     meal.price = price ?? meal.price;
+    meal.updated_at = knex.raw('CURRENT_TIMESTAMP')
 
-    await knex("meals").select("image").insert(meal).where({ id })
 
+    await knex("meals").where({ id: meal_id }).update(meal)
+
+    const  ingredientsInsert = ingredients.map(ingredient => {
+      return {
+        name: ingredient, 
+        meals_id :meal_id
+      }
+    })
+  
+    await knex("ingredients").where({id: meal_id}).delete()
+    await knex("ingredients").insert(ingredientsInsert)
+    
     return response.status(200).json(meal)
   }
 
