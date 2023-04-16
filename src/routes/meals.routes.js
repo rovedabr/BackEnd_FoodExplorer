@@ -15,7 +15,7 @@ const mealsController = new MealsController();
 const imageController = new ImageController();
 
 mealsRoutes.post("/",  ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), mealsController.create);
-mealsRoutes.put("/:id",  ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), mealsController.create);
+mealsRoutes.put("/:id",  ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), mealsController.update);
 mealsRoutes.get("/:id", mealsController.show);
 mealsRoutes.get("/", mealsController.index);
 mealsRoutes.delete("/:id", ensureAuthenticated, ensureUserAdminVerify, mealsController.delete)
