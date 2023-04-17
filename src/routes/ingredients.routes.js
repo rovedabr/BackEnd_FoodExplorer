@@ -6,6 +6,6 @@ const ingredientsRoutes = Router();
 
 const ingredientsController = new IngredientsController();
 
-ingredientsRoutes.get("/:name", ingredientsController.index);
+ingredientsRoutes.get("/", ingredientsController.index);
 
 module.exports = ingredientsRoutes;
