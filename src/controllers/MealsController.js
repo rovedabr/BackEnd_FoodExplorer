@@ -56,54 +56,43 @@ class MealsController {
   }
 
   async index(request, response) {
-    const { title, ingredients } = request.query  
+    const { title, ingredients } = request.query;
 
     let meals
 
-    if(ingredients) {
-      const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim())    
-
-      const [ meals ] = await knex("ingredients")        
-        .select([
-          "meals.id",
-          "meals.title",
-          "meals.image",
-          "meals.category",
-          "meals.price",
-          "meals.description"
-        ])
-        .whereLike("meals.title", `%${title}`)
-        .whereIn("name", filterIngredients)
-        .innerJoin("meals", "meals.id", "ingredients.meals_id")
-        .orderBy("meals.title")
-        .select([
-          "meals.id",
-          "meals.title",
-          "meals.image",
-          "meals.category",
-          "meals.price",
-          "meals.description"
-        ])
-        .whereLike("meals.title", `%${title}`)
-        .whereIn("name", filterIngredients)
-        .innerJoin("meals", "meals.id", "ingredients.meals_id")
-        .orderBy("meals.title")
+    if (ingredients) {
+      const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim())
       
-  } else {
-    meals = await knex("meals")
-    .whereLike("title", `%${title}%`) 
-    .orderBy("title")
-  }
+      meals = await knex("ingredients")
+        .select([
+          "meals.id",
+          "meals.title",
+          "meals.category",
+          "meals.description",
+          "meals.price"
+        ])
+        .whereLike("meals.title", `%${title}%`)
+        .whereIn("name", filterIngredients)
+        .innerJoin("meals", "meals.id", "ingredients.meals_id")
+        .orderBy("meals.title")
 
-    const mealsIngredients = await knex("meals")
+    } else {
+      meals = await knex("meals")
+        .orderBy("title")
+        .whereLike("title", `%${title}%`)
+    }
+
+    const allIngredients = await knex("ingredients")
     const mealsWithIngredients = meals.map(meal => {
-      const mealIngredient = mealsIngredients.filter(ingredient => ingredient.meals_id === meals.id)
+      const mealIngredients = allIngredients.filter(ingredient => ingredient.meals_id === meal.id)
       return {
         ...meal,
-        ingredients: mealIngredient
+        ingredients: mealIngredients
       }
     })
-    return response.json(mealsIngredients)
+
+
+    return response.json(mealsWithIngredients)
   }
   
   async update(request, response) { 
