@@ -20,6 +20,10 @@ class UserCreateServices {
       throw new AppError("E-mail já cadastrado!")
     };
 
+    if (password < 6) {
+      throw new AppError("A senha deverá conter no mínimo 6 caracteres.")
+    }
+
     const hashedPassword = await hash(password, 10);
 
     const userCreated = await this.userRepository.create({ name, email, admin, password: hashedPassword });
