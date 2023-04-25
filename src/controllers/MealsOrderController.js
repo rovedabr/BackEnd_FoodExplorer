@@ -4,18 +4,22 @@ const AppError = require("../utils/AppError");
 class MealsOrderController {
   async create(request, response) {
     const user_id   = request.user.id;
-    const { id, title, price, image, quantity } = request.body;
-    
-    await knex("mealsOrder").insert({
-      user_id,
-      meals_id: id,
-      title,
-      price,
-      image,
-      quantity
-    })
+    const { cart } = request.body;
 
-    return response.json()
+    const cartInsert = cart.map(cart => {
+      return {
+        user_id,
+        meals_id: cart.id,
+        title: cart.title,
+        price: cart.price,
+        image: cart.image,
+        quantity: cart.quantity
+      }
+    })
+    
+    await knex("mealsOrder").insert(cartInsert)
+
+    return response.json(cartInsert)
   }
 
   async show(request, response) {
@@ -25,8 +29,8 @@ class MealsOrderController {
     const mealOrder = await knex("mealsOrder")
       .select([
         "user_id",
-        "order_details",
-        "observation",
+        "title",
+        "price",
         "created_at",
       ])
       .where({
@@ -37,12 +41,12 @@ class MealsOrderController {
     return response.json(mealOrder)
   }
 
-//!verificar a função de delete
+//!verificar se irei criar a tela de controle dos pedidos
   async delete(request, response) {
     const { id } = request.params;
     console.log(id)
  
-    // await knex("mealsOrder").where({ id }).delete()
+    await knex("mealsOrder").where({ id }).delete()
 
     return response.json("Pedido apagado com sucesso")
   }
