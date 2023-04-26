@@ -9,7 +9,6 @@ class MealsOrderController {
     const cartInsert = cart.map(cart => {
       return {
         user_id,
-        meals_id: cart.id,
         title: cart.title,
         price: cart.price,
         image: cart.image,
@@ -39,7 +38,6 @@ class MealsOrderController {
 
   async delete(request, response) {
     const { id } = request.params;
-    console.log(id)
  
     await knex("mealsOrder").where({ id }).delete()
 

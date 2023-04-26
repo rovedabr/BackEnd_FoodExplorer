@@ -2,7 +2,6 @@
 exports.up = knex => knex.schema.createTable("mealsOrder", table => {
   table.increments("id");
   table.integer("user_id").references("id").inTable("users").onDelete("CASCADE");
-  table.integer("meals_id").references("id").inTable("meals").onDelete("CASCADE");
   table.text("title").notNullable();
   table.integer("price").notNullable();
   table.varchar("image").default(null);
