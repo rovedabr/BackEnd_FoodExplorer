@@ -23,25 +23,20 @@ class MealsOrderController {
   }
 
   async show(request, response) {
-    const user_id  = request.user.id;
-    const { mealsOrder_id } = request.params;
+    const { id } = request.params;
   
-    const mealOrder = await knex("mealsOrder")
+    const [mealOrder] = await knex("mealsOrder")
       .select([
         "user_id",
         "title",
         "price",
         "created_at",
       ])
-      .where({
-        user_id, 
-        id: mealsOrder_id
-      })
+      .where({id})
 
     return response.json(mealOrder)
   }
 
-//!verificar se irei criar a tela de controle dos pedidos
   async delete(request, response) {
     const { id } = request.params;
     console.log(id)

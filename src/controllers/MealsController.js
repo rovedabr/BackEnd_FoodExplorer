@@ -22,7 +22,7 @@ class MealsController {
     const diskStorage = new DiskStorage()
     const filename = await diskStorage.saveFile(imageFile)
 
-    const [ meals_id ] = await knex("meals").insert({
+    const [meals_id] = await knex("meals").insert({
       user_id,
       image: filename,
       title,
@@ -31,9 +31,9 @@ class MealsController {
       price 
     })
 
-    const  ingredientsInsert = ingredients.map(ingredient => {
+      const ingredientsInsert = ingredients.map(name => {
       return {
-        name: ingredient, 
+        name, 
         meals_id
       }
     })
