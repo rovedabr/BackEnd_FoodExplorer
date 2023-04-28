@@ -99,7 +99,6 @@ class MealsController {
   async update(request, response) { 
     const { title, category, description, price, ingredients, image } = request.body;
     const id = request.params.id;
-    console.log(title, category, description, price, ingredients, image);
 
     const imageFile = request.file.filename
     const diskStorage = new DiskStorage()
