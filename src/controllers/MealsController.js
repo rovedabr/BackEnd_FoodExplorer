@@ -1,6 +1,7 @@
 const knex = require("../database/knex");
 const AppError = require("../utils/AppError");
-const DiskStorage = require("../providers/DiskStorage")
+const DiskStorage = require("../providers/DiskStorage");
+const { diskStorage } = require("multer");
 
 class MealsController {
   async create(request, response) {
@@ -96,44 +97,42 @@ class MealsController {
   }
   
   async update(request, response) { 
-    const  meal_id   = request.params.id;
-    const { title, description, category, price, ingredients, image } = request.body
+    const { title, category, description, price, ingredients, image } = request.body;
+    const id = request.params.id;
+    console.log(title, category, description, price, ingredients, image);
 
     const imageFile = request.file.filename
     const diskStorage = new DiskStorage()
-    const filename = await diskStorage.saveFile(imageFile)
 
-    const meal = await knex("meals").where({ id: meal_id }).first()
-
-    if(!meal) {
-      throw new AppError("Prato não localizado ou inexistente", 401)
-    }
+    const meal = await knex("meals").where({id}).first()
 
     if (meal.image) {
       await diskStorage.deleteFile(meal.image)
     }
 
-    meal.image = image ?? filename;
+    const filename = await diskStorage.saveFile(imageFile)
+
+    meal.image = image  ?? filename;
     meal.title = title ?? meal.title;
     meal.description = description ?? meal.description;
     meal.category = category ?? meal.category;
     meal.price = price ?? meal.price;
     meal.updated_at = knex.raw('CURRENT_TIMESTAMP')
 
-
-    await knex("meals").where({ id: meal_id }).update(meal)
-
-    const  ingredientsInsert = ingredients.map(ingredient => {
+    await knex("meals").where({id}).update(meal)
+    
+    await knex("ingredients").where({meals_id: id}).delete()
+    
+    const ingredientsInsert = ingredients.map(name => {
       return {
-        name: ingredient, 
-        meals_id :meal_id
+        name, 
+        meals_id: meal.id
       }
-    })
-  
-    await knex("ingredients").where({id: meal_id}).delete()
+    }) 
+
     await knex("ingredients").insert(ingredientsInsert)
     
-    return response.status(200).json(meal)
+    return response.status(200).json()
   }
 
 
