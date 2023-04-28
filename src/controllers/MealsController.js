@@ -97,21 +97,21 @@ class MealsController {
   }
   
   async update(request, response) { 
-    const { title, category, description, price, ingredients, image } = request.body;
+    const { title, category, description, price, ingredients } = request.body;
     const id = request.params.id;
 
-    const imageFile = request.file.filename
-    const diskStorage = new DiskStorage()
+    // const imageFile = request.file.filename
+    // const diskStorage = new DiskStorage()
 
     const meal = await knex("meals").where({id}).first()
 
-    if (meal.image) {
-      await diskStorage.deleteFile(meal.image)
-    }
+    // if (meal.image) {
+    //   await diskStorage.deleteFile(meal.image)
+    // }
 
-    const filename = await diskStorage.saveFile(imageFile)
+    // const filename = await diskStorage.saveFile(imageFile)
 
-    meal.image = image  ?? filename;
+    // meal.image = image  ?? filename;
     meal.title = title ?? meal.title;
     meal.description = description ?? meal.description;
     meal.category = category ?? meal.category;
