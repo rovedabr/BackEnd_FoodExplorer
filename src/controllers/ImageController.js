@@ -4,12 +4,13 @@ const DiskStorage = require("../providers/DiskStorage");
 
 class ImageController {
   async update(request, response) {
-    const {id} = request.params;
-
+    const id = request.params.id;
     const imageFilename = request.file.filename;
+
+    console.log(imageFilename)
     const diskStorage = new DiskStorage;
 
-    const [meal] = await knex("meals").where({ id }).first()
+    const meal = await knex("meals").where({ id }).first()
 
     if(!meal) {
       throw new AppError("Prato não localizado ou inexistente", 401)
@@ -23,7 +24,7 @@ class ImageController {
 
     meal.image = filename;
 
-    await knex("meals").update(meal).select("id").where({id});
+    await knex("meals").update(meal).where({id});
     
     return response.status(200).json()
   } 

@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const uploadsConfig = require("../configs/upload");
 const multer = require("multer");
+const uploadsConfig = require("../configs/upload");
 
 const MealsController = require("../controllers/MealsController");
 const ImageController = require("../controllers/ImageController");
@@ -19,6 +19,6 @@ mealsRoutes.put("/:id",  ensureAuthenticated, ensureUserAdminVerify, upload.sing
 mealsRoutes.get("/:id", mealsController.show);
 mealsRoutes.get("/", mealsController.index);
 mealsRoutes.delete("/:id", ensureAuthenticated, ensureUserAdminVerify, mealsController.delete)
-mealsRoutes.patch("/image/:id", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), imageController.update);
+mealsRoutes.patch("/:id", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), imageController.update); //!==================
 
 module.exports = mealsRoutes; 
