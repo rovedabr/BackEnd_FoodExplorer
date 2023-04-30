@@ -8,7 +8,6 @@ const mealsOrderRoutes = Router();
 
 const mealsOrderController = new MealsOrderController();
 
-
 mealsOrderRoutes.post("/", ensureAuthenticated, mealsOrderController.create);
 mealsOrderRoutes.get("/:id",  ensureAuthenticated, mealsOrderController.show);
 mealsOrderRoutes.delete("/:id",  ensureAuthenticated, ensureUserAdminVerify, mealsOrderController.delete);

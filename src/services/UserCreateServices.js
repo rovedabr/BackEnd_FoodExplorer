@@ -30,7 +30,6 @@ class UserCreateServices {
 
     return userCreated;
   }
-
 }
 
 module.exports = UserCreateServices;

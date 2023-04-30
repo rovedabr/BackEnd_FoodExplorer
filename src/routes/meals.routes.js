@@ -19,6 +19,6 @@ mealsRoutes.put("/:id",  ensureAuthenticated, ensureUserAdminVerify, upload.sing
 mealsRoutes.get("/:id", mealsController.show);
 mealsRoutes.get("/", mealsController.index);
 mealsRoutes.delete("/:id", ensureAuthenticated, ensureUserAdminVerify, mealsController.delete)
-mealsRoutes.patch("/:id", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), imageController.update); //!==================
+mealsRoutes.patch("/:id", ensureAuthenticated, ensureUserAdminVerify, upload.single("image"), imageController.update); 
 
 module.exports = mealsRoutes; 
