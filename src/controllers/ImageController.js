@@ -7,7 +7,6 @@ class ImageController {
     const id = request.params.id;
     const imageFilename = request.file.filename;
 
-    console.log(imageFilename)
     const diskStorage = new DiskStorage;
 
     const meal = await knex("meals").where({ id }).first()
